@@ -1,0 +1,4259 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "L5 OpenApi",
+        "description": "L5 Swagger OpenApi description",
+        "contact": {
+            "email": "darius@matulionis.lt"
+        },
+        "version": "1.0.0",
+        "x-logo": {
+            "url": "https://via.placeholder.com/190x90.png?text=L5-Swagger"
+        }
+    },
+    "paths": {
+        "/api/v1/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register a new user",
+                "operationId": "6796c44e1f6079c411abbfed066c5907",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "vendor_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Jane Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jane@example.com"
+                                    },
+                                    "vendor_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "user created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user created successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "login a user",
+                "operationId": "da2ca4d7a5cdec77b8b45a20373535cb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jane@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "user logged  in successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user logged successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Log out the authenticated user",
+                "operationId": "15a1f8793c15f705fcf5f0c3196a2b41",
+                "responses": {
+                    "200": {
+                        "description": "Logged out successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/get-user": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get an autenticated user",
+                "operationId": "79b72767d215ca7d4cce5e166ce12d4a",
+                "responses": {
+                    "201": {
+                        "description": "user retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user retrieved successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/users": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get all users by super Admin",
+                "operationId": "565f3ea9fe1c742d435093f6f6550dcb",
+                "responses": {
+                    "201": {
+                        "description": "users retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "users retrieved successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/user": {
+            "put": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "update an autenticated user",
+                "operationId": "b11e8ce3802b5c77fcf2fdbfd54c8bd3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Jane Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "jane@example.com"
+                                    },
+                                    "vendor_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "user retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user retrieved successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "delete a user",
+                "operationId": "6b0225edad0b0e45519dee7b673013bc",
+                "responses": {
+                    "201": {
+                        "description": "user deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user deleted successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/category": {
+            "get": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "Get all categories",
+                "operationId": "20d3cf3a1801e111a5f74f854befa99e",
+                "responses": {
+                    "201": {
+                        "description": "categories retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "category retrieved successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "Create a new vendor",
+                "operationId": "8869ca502a1b6dbee083dd52e09c12cb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "IT Equipment"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Books and resources covering software development, computers, programming, and emerging technologies."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "category created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Vendor registered successfully"
+                                        },
+                                        "category": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "IT Equipment"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Books and resources covering software development, computers, programming, and emerging technologies."
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The email has already been taken."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Something went wrong."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/category/{id}": {
+            "put": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "update a category",
+                "operationId": "488c1b08a2d198ff4dbc69ddc55e347b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "vendor id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "IT Equipment"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Books and resources covering software development, computers, programming, and emerging technologies."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "vendor updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "vendor updated successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "category"
+                ],
+                "summary": "delete a category",
+                "operationId": "072539a84826e2e29479df2f93eee4f2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "vendor id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "category deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "category deleted successfully"
+                                        },
+                                        "category": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/goods-receipts": {
+            "post": {
+                "tags": [
+                    "Goods Receipts"
+                ],
+                "summary": "Create a goods receipt",
+                "operationId": "eda3614a25ee4beb33859acfae010f33",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "purchase_order_id",
+                                    "received_date"
+                                ],
+                                "properties": {
+                                    "purchase_order_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "received_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-09-11"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Received in good condition"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Goods receipt created successfully"
+                    },
+                    "400": {
+                        "description": "Purchase order is not ready for receiving"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/goods-receipt-items": {
+            "post": {
+                "tags": [
+                    "Goods Receipt Items"
+                ],
+                "summary": "Add an item to a goods receipt",
+                "operationId": "7472e9cc774654aa738ff2aeeb2384d0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "goods_receipt_id",
+                                    "purchase_order_item_id",
+                                    "quantity_received"
+                                ],
+                                "properties": {
+                                    "goods_receipt_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "purchase_order_item_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quantity_received": {
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Box inspected"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Goods receipt item created successfully"
+                    },
+                    "400": {
+                        "description": "Goods receipt or purchase order item is invalid"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/invoices": {
+            "post": {
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Create an invoice for a purchase order",
+                "operationId": "51afb04e336aa3a065a0f28e378ed3b6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "purchase_order_id",
+                                    "invoice_date"
+                                ],
+                                "properties": {
+                                    "purchase_order_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "invoice_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-09-21"
+                                    },
+                                    "due_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-10-21",
+                                        "nullable": true
+                                    },
+                                    "tax": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 50
+                                    },
+                                    "discount": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Invoice for delivered goods",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Invoice created successfully"
+                    },
+                    "400": {
+                        "description": "Purchase order is not eligible for invoicing"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "409": {
+                        "description": "An invoice already exists for this purchase order"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/invoices/{invoice}/submit": {
+            "patch": {
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Submit a pending invoice for approval",
+                "operationId": "a484e6ee1d40fd1686ea10bbe8265f38",
+                "parameters": [
+                    {
+                        "name": "invoice",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Invoice submitted for approval successfully"
+                    },
+                    "400": {
+                        "description": "Invoice cannot be submitted"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Invoice does not belong to the authenticated vendor"
+                    },
+                    "404": {
+                        "description": "Invoice not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/invoices/{invoice}/approve": {
+            "patch": {
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Approve a submitted invoice",
+                "operationId": "5f39b486119ad8c0918f913a5d24a03e",
+                "parameters": [
+                    {
+                        "name": "invoice",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Invoice approved successfully"
+                    },
+                    "400": {
+                        "description": "Invoice cannot be approved"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Invoice not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/invoices/{invoice}/reject": {
+            "patch": {
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Reject a submitted invoice",
+                "operationId": "683c6f8c4871deeb8bad431712365b43",
+                "parameters": [
+                    {
+                        "name": "invoice",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rejection_reason"
+                                ],
+                                "properties": {
+                                    "rejection_reason": {
+                                        "type": "string",
+                                        "example": "The invoice quantity does not match the goods received.",
+                                        "minLength": 5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Invoice rejected successfully"
+                    },
+                    "400": {
+                        "description": "Invoice cannot be rejected"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Invoice not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/invoice-items": {
+            "post": {
+                "tags": [
+                    "Invoice Items"
+                ],
+                "summary": "Add an item to an invoice",
+                "operationId": "8b931627a0dfa0848f690477da0889ab",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "invoice_id",
+                                    "purchase_order_item_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "invoice_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "purchase_order_item_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 2,
+                                        "minimum": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Invoice item added successfully"
+                    },
+                    "400": {
+                        "description": "Invoice item cannot be added"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Invoice does not belong to the authenticated vendor"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/payments": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "operationId": "createPayment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "invoice_id",
+                                    "payment_method"
+                                ],
+                                "properties": {
+                                    "invoice_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "payment_method": {
+                                        "type": "string",
+                                        "example": "bank_transfer",
+                                        "enum": [
+                                            "bank_transfer",
+                                            "card",
+                                            "cheque"
+                                        ]
+                                    },
+                                    "note": {
+                                        "type": "string",
+                                        "example": "Payment for approved invoice",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "user created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user created successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/permissions/roles": {
+            "post": {
+                "tags": [
+                    "Permissions"
+                ],
+                "summary": "Assign roles to a user",
+                "operationId": "a3c36ddf58c1232a44db3cac27f152c9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "roles"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "roles": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            2
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Role assigned successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/permissions": {
+            "post": {
+                "tags": [
+                    "Permissions"
+                ],
+                "summary": "Assign permissions to a role",
+                "operationId": "8f282c85750f30de5a9c4066716653dc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "role_id",
+                                    "permissions"
+                                ],
+                                "properties": {
+                                    "role_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "permissions": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            3
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Permission assigned successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-orders": {
+            "post": {
+                "tags": [
+                    "Purchase Orders"
+                ],
+                "summary": "Create a purchase order from an approved quotation",
+                "operationId": "fcdb8153f4926ca378e2a8ac2dd20372",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "quotation_id"
+                                ],
+                                "properties": {
+                                    "quotation_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "expected_delivery_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-09-20"
+                                    },
+                                    "delivery_address": {
+                                        "type": "string",
+                                        "example": "Plot 315 Woji"
+                                    },
+                                    "payment_terms": {
+                                        "type": "string",
+                                        "example": "Payment on delivery"
+                                    },
+                                    "tax": {
+                                        "type": "number",
+                                        "example": 50
+                                    },
+                                    "discount": {
+                                        "type": "number",
+                                        "example": 200
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Purchase order created successfully"
+                    },
+                    "400": {
+                        "description": "Quotation is not approved or a purchase order already exists"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-orders/{purchaseOrder}/submit": {
+            "patch": {
+                "tags": [
+                    "Purchase Orders"
+                ],
+                "summary": "Submit a purchase order for approval",
+                "operationId": "cddbb059b9fb57f32484bf9565920fb7",
+                "parameters": [
+                    {
+                        "name": "purchaseOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Purchase order submitted successfully"
+                    },
+                    "400": {
+                        "description": "Purchase order cannot be submitted"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Purchase order not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-orders/{purchaseOrder}/approve": {
+            "patch": {
+                "tags": [
+                    "Purchase Orders"
+                ],
+                "summary": "Approve a purchase order",
+                "operationId": "762fa55b530cdb46c0aaa2cf5d39657c",
+                "parameters": [
+                    {
+                        "name": "purchaseOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Purchase order approved successfully"
+                    },
+                    "400": {
+                        "description": "Purchase order is not pending approval"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Purchase order not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-orders/{purchaseOrder}/reject": {
+            "patch": {
+                "tags": [
+                    "Purchase Orders"
+                ],
+                "summary": "Reject a purchase order",
+                "operationId": "a8507b45d5f89ecb86a9ea0970b30be3",
+                "parameters": [
+                    {
+                        "name": "purchaseOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Purchase order rejected successfully"
+                    },
+                    "400": {
+                        "description": "Purchase order is not pending approval"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Purchase order not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-orders/{purchaseOrder}/send": {
+            "patch": {
+                "tags": [
+                    "Purchase Orders"
+                ],
+                "summary": "Send an approved purchase order to the vendor",
+                "operationId": "32634a5f08598f8871e63edd82964143",
+                "parameters": [
+                    {
+                        "name": "purchaseOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Purchase order sent successfully"
+                    },
+                    "400": {
+                        "description": "Purchase order is not approved"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Purchase order not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-orders/{purchaseOrder}/receiving-status": {
+            "patch": {
+                "tags": [
+                    "Purchase Orders"
+                ],
+                "summary": "Update a purchase order receiving status",
+                "operationId": "3537a422ebc1a57d113ce97d8c98d9ad",
+                "parameters": [
+                    {
+                        "name": "purchaseOrder",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Receiving status updated successfully"
+                    },
+                    "400": {
+                        "description": "Purchase order cannot have its receiving status updated"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Purchase order not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-order-items": {
+            "post": {
+                "tags": [
+                    "Purchase Order Items"
+                ],
+                "summary": "Add an item to a purchase order",
+                "operationId": "055ab797df8efb45b86f27389c1e0715",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "purchase_order_id",
+                                    "quotation_item_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "purchase_order_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quotation_item_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quantity": {
+                                        "type": "number",
+                                        "example": 5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Purchase order item created successfully"
+                    },
+                    "400": {
+                        "description": "Purchase order or quotation item is invalid"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-requests": {
+            "get": {
+                "tags": [
+                    "Purchase Requests"
+                ],
+                "summary": "Get all purchase requests for the authenticated user",
+                "operationId": "762973603ddae20d17be674612b9f7e7",
+                "responses": {
+                    "200": {
+                        "description": "Purchase requests retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "purchase_requests": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Purchase Requests"
+                ],
+                "summary": "Create a purchase request",
+                "operationId": "5f7dcb545d1177ffb645a2f1581fd147",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "description",
+                                    "needed_by"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Laptop for project team"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Request for 2 business laptops"
+                                    },
+                                    "needed_by": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-10-15"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Purchase request created successfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-requests/{purchaseRequest}": {
+            "get": {
+                "tags": [
+                    "Purchase Requests"
+                ],
+                "summary": "Get a single purchase request",
+                "operationId": "c10a67408beee9c9860e5be757818d08",
+                "parameters": [
+                    {
+                        "name": "purchaseRequest",
+                        "in": "path",
+                        "description": "Purchase request ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Purchase request retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "purchase_request": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Purchase Requests"
+                ],
+                "summary": "Update a purchase request",
+                "operationId": "d80d3f19164e249c47bec18e2ed10330",
+                "parameters": [
+                    {
+                        "name": "purchaseRequest",
+                        "in": "path",
+                        "description": "Purchase request ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Laptop for project team"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Updated request for 3 laptops"
+                                    },
+                                    "needed_by": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-10-20"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Purchase request updated successfully"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Purchase Requests"
+                ],
+                "summary": "Delete a purchase request",
+                "operationId": "d9e4baf475808465ea4773d2c1211e22",
+                "parameters": [
+                    {
+                        "name": "purchaseRequest",
+                        "in": "path",
+                        "description": "Purchase request ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Purchase request deleted successfully"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-requests/{purchaseRequest}/approve": {
+            "patch": {
+                "tags": [
+                    "Purchase Requests"
+                ],
+                "summary": "Approve a pending purchase request",
+                "operationId": "9d2bdf63cb2df4e2891dc62d4620468f",
+                "parameters": [
+                    {
+                        "name": "purchaseRequest",
+                        "in": "path",
+                        "description": "Purchase request ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "user created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user created successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-requests/{purchaseRequest}/reject": {
+            "patch": {
+                "tags": [
+                    "Purchase Requests"
+                ],
+                "summary": "Reject a pending purchase request",
+                "operationId": "b9bc210030edf78e791fb8202bb7a365",
+                "parameters": [
+                    {
+                        "name": "purchaseRequest",
+                        "in": "path",
+                        "description": "Purchase request ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Purchase request rejected successfully"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-request-items": {
+            "post": {
+                "tags": [
+                    "Purchase Request Items"
+                ],
+                "summary": "Create a purchase request item",
+                "operationId": "91bf67112d9ff6bf7ada9718a0fbd82d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "purchase_request_id",
+                                    "service_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "purchase_request_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "service_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Dell laptop for operations team"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Purchase request item created successfully"
+                    },
+                    "400": {
+                        "description": "Purchase request not pending"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/purchase-request-items/{purchaseRequestItem}": {
+            "put": {
+                "tags": [
+                    "Purchase Request Items"
+                ],
+                "summary": "Update a purchase request item",
+                "operationId": "61f0203da58f116bab2e8151e7434833",
+                "parameters": [
+                    {
+                        "name": "purchaseRequestItem",
+                        "in": "path",
+                        "description": "Purchase request item ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Updated item description"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Purchase request item updated successfully"
+                    },
+                    "400": {
+                        "description": "Purchase request not pending"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/quotations": {
+            "get": {
+                "tags": [
+                    "Quotations"
+                ],
+                "summary": "Get quotations for the authenticated user's vendor",
+                "operationId": "77e2033e1de89d0007d0af75a77863bf",
+                "responses": {
+                    "200": {
+                        "description": "Quotations retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quotations retrieved successfully."
+                                        },
+                                        "quotations": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Quotations"
+                ],
+                "summary": "Create a quotation for an RFQ",
+                "operationId": "a87ac759062bfd5b7341d15706ca519d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rfq_id",
+                                    "quotation_date",
+                                    "valid_until"
+                                ],
+                                "properties": {
+                                    "rfq_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "quotation_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-09-04"
+                                    },
+                                    "valid_until": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2026-09-18"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Includes delivery and installation support"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Quotation created successfully"
+                    },
+                    "403": {
+                        "description": "Vendor not associated or unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/quotations/{quotation}": {
+            "delete": {
+                "tags": [
+                    "Quotations"
+                ],
+                "summary": "Delete a quotation",
+                "operationId": "a8dfe8f60b3dd4a83deaa2fff7009841",
+                "parameters": [
+                    {
+                        "name": "quotation",
+                        "in": "path",
+                        "description": "Quotation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Quotation deleted successfully"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Quotations"
+                ],
+                "summary": "Submit a pending quotation",
+                "operationId": "5c51a5c769538e2fc2355dc85a60e6fd",
+                "parameters": [
+                    {
+                        "name": "quotation",
+                        "in": "path",
+                        "description": "Quotation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Quotation submitted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "The quotation does not belong to the authenticated vendor"
+                    },
+                    "404": {
+                        "description": "Quotation not found"
+                    },
+                    "409": {
+                        "description": "Only pending quotations can be submitted"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/quotations/{quotation}/evaluate": {
+            "patch": {
+                "tags": [
+                    "Quotations"
+                ],
+                "summary": "Move a submitted quotation under review",
+                "operationId": "b7a775bb03681b33bc1233cb9f902e5a",
+                "parameters": [
+                    {
+                        "name": "quotation",
+                        "in": "path",
+                        "description": "Quotation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Quotation is now under review"
+                    },
+                    "400": {
+                        "description": "Quotation cannot be evaluated"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Quotation not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/quotations/{quotation}/accept": {
+            "patch": {
+                "tags": [
+                    "Quotations"
+                ],
+                "summary": "Accept a quotation under review",
+                "operationId": "7d3f1d935ee987b0a6a9725cadf13d4d",
+                "parameters": [
+                    {
+                        "name": "quotation",
+                        "in": "path",
+                        "description": "Quotation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Quotation accepted successfully"
+                    },
+                    "400": {
+                        "description": "Quotation cannot be accepted"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Quotation not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/quotations/{quotation}/reject": {
+            "patch": {
+                "tags": [
+                    "Quotations"
+                ],
+                "summary": "Reject a quotation under review",
+                "operationId": "971059cb9bd1401f7e95c83c74e6bbd5",
+                "parameters": [
+                    {
+                        "name": "quotation",
+                        "in": "path",
+                        "description": "Quotation ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Quotation rejected successfully"
+                    },
+                    "400": {
+                        "description": "Quotation cannot be rejected"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Quotation not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/quotation-items": {
+            "post": {
+                "tags": [
+                    "Quotations items"
+                ],
+                "summary": "Create a quotation item",
+                "operationId": "6c1d46adb645cb5155ebfc18e6852482",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "quotation_id",
+                                    "purchase_request_item_id",
+                                    "quantity",
+                                    "unit_price"
+                                ],
+                                "properties": {
+                                    "quotation_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "purchase_request_item_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "unit_price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 450
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "category created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Vendor registered successfully"
+                                        },
+                                        "category": {
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "IT Equipment"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Books and resources covering software development, computers, programming, and emerging technologies."
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The email has already been taken."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Something went wrong."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/quotation-items/{quotationItem}": {
+            "put": {
+                "tags": [
+                    "Quotations items"
+                ],
+                "summary": "Update a quotation item",
+                "operationId": "70034bba70d39b155c53814a8884578d",
+                "parameters": [
+                    {
+                        "name": "quotationItem",
+                        "in": "path",
+                        "description": "Quotation item ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "quantity": {
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "unit_price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 500
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Quotation item updated successfully"
+                    },
+                    "400": {
+                        "description": "Invalid quotation item request"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rfqs": {
+            "get": {
+                "tags": [
+                    "RFQs"
+                ],
+                "summary": "Get an Rfqs of an authenticated user",
+                "operationId": "de523ceb1fc741e9bdca787edaed03db",
+                "responses": {
+                    "200": {
+                        "description": "Rfqs retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Rfqs retrieved successfully."
+                                        },
+                                        "rfqs": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "RFQs"
+                ],
+                "summary": "Create an RFQ for an approved purchase request",
+                "operationId": "d1d264f0989058fd2ac04eb374bc2617",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "purchase_request_id",
+                                    "title",
+                                    "opening_date",
+                                    "closing_date"
+                                ],
+                                "properties": {
+                                    "purchase_request_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Office furniture procurement"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Procurement of desks and chairs",
+                                        "nullable": true
+                                    },
+                                    "opening_date": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2026-09-10 09:00:00"
+                                    },
+                                    "closing_date": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "example": "2026-09-20 17:00:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "RFQ created successfully"
+                    },
+                    "400": {
+                        "description": "Purchase request must be approved"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rfqs/{rfq}": {
+            "patch": {
+                "tags": [
+                    "RFQs"
+                ],
+                "summary": "Publish a draft RFQ",
+                "operationId": "317069e6de76be95adc8308b362d65f4",
+                "parameters": [
+                    {
+                        "name": "rfq",
+                        "in": "path",
+                        "description": "RFQ ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "user created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user created successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rfqs/{rfq}/close": {
+            "patch": {
+                "tags": [
+                    "RFQs"
+                ],
+                "summary": "Close a published RFQ",
+                "operationId": "83f1685b699ab2dc266f56d5685cdbcc",
+                "parameters": [
+                    {
+                        "name": "rfq",
+                        "in": "path",
+                        "description": "RFQ ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "RFQ closed successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Only the RFQ creator can close it"
+                    },
+                    "404": {
+                        "description": "RFQ not found"
+                    },
+                    "409": {
+                        "description": "RFQ is not ready to be closed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rfq-vendors": {
+            "post": {
+                "tags": [
+                    "RFQ Vendors"
+                ],
+                "summary": "Add a vendor to a draft RFQ",
+                "operationId": "3435f6ccade69e6712315501a70606f9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "rfq_id",
+                                    "vendor_id"
+                                ],
+                                "properties": {
+                                    "rfq_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "vendor_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Vendor added to RFQ successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "409": {
+                        "description": "Vendor already added to this RFQ"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/rfq-vendors/{rfqVendor}": {
+            "delete": {
+                "tags": [
+                    "RFQ Vendors"
+                ],
+                "summary": "Remove a vendor from a draft RFQ",
+                "operationId": "40850915ab433a4c6728c507c384b056",
+                "parameters": [
+                    {
+                        "name": "rfqVendor",
+                        "in": "path",
+                        "description": "RFQ vendor assignment ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vendor removed from RFQ successfully"
+                    },
+                    "400": {
+                        "description": "Vendors can only be removed from a draft RFQ"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "RFQ vendor assignment not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/service": {
+            "get": {
+                "tags": [
+                    "service"
+                ],
+                "summary": "Get all products and services",
+                "operationId": "208e056c06dddac07b2a0d35fd28981d",
+                "responses": {
+                    "200": {
+                        "description": "Products and services retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "services": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "service"
+                ],
+                "summary": "Create a product or service",
+                "operationId": "2b17f581f588a89c92d01753303e7374",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "category_id",
+                                    "sku",
+                                    "name",
+                                    "type",
+                                    "unit",
+                                    "estimated_price"
+                                ],
+                                "properties": {
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "sku": {
+                                        "type": "string",
+                                        "example": "IT-001"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Laptop"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Business laptop"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "product",
+                                        "enum": [
+                                            "product",
+                                            "service"
+                                        ]
+                                    },
+                                    "unit": {
+                                        "type": "string",
+                                        "example": "pcs"
+                                    },
+                                    "estimated_price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1250
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "active"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "user created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "user created successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/service/{id}": {
+            "put": {
+                "tags": [
+                    "service"
+                ],
+                "summary": "Update a product or service",
+                "operationId": "864e4c86e64f39f6322ce4b4d31c46e1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product or service ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "category_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "sku": {
+                                        "type": "string",
+                                        "example": "IT-001"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Laptop"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Business laptop"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "product",
+                                        "enum": [
+                                            "product",
+                                            "service"
+                                        ]
+                                    },
+                                    "unit": {
+                                        "type": "string",
+                                        "example": "pcs"
+                                    },
+                                    "estimated_price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1250
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "active"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product or service updated successfully"
+                    },
+                    "404": {
+                        "description": "Product or service not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "service"
+                ],
+                "summary": "Delete a product or service",
+                "operationId": "21b1cb9ae260c2dc97a5f2492b7192e6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Product or service ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product or service deleted successfully"
+                    },
+                    "404": {
+                        "description": "Product or service not found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/vendor": {
+            "get": {
+                "tags": [
+                    "Vendor"
+                ],
+                "summary": "Get all vendors",
+                "operationId": "bfc621bd104e3bcf87b6e1d6da247f39",
+                "responses": {
+                    "201": {
+                        "description": "vendors retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "vendors retrieved successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Vendor"
+                ],
+                "summary": "update an autenticated vendor",
+                "operationId": "f643d93eea5753ae0dc9f8e41ffd53f4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "company_name",
+                                    "email",
+                                    "phone",
+                                    "address",
+                                    "bank_name",
+                                    "bank_number"
+                                ],
+                                "properties": {
+                                    "company_name": {
+                                        "type": "string",
+                                        "example": "ABC Supplies Ltd"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "abc@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "plot 315 PH"
+                                    },
+                                    "bank_name": {
+                                        "type": "string",
+                                        "example": "UBA"
+                                    },
+                                    "number_number": {
+                                        "type": "integer",
+                                        "example": "9161645867"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "vendor updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "vendor updated successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Vendor"
+                ],
+                "summary": "Create a new vendor",
+                "operationId": "bb0929917f1f212d9419e12b15487272",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "company_name",
+                                    "email",
+                                    "phone",
+                                    "registration_number",
+                                    "tax_number",
+                                    "address",
+                                    "bank_name",
+                                    "bank_account",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "company_name": {
+                                        "type": "string",
+                                        "example": "ABC Supplies Ltd"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "abc@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "secret123"
+                                    },
+                                    "registration_number": {
+                                        "type": "string",
+                                        "example": "RC123456"
+                                    },
+                                    "tax_number": {
+                                        "type": "string",
+                                        "example": "TIN123456789"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "plot 315 PH"
+                                    },
+                                    "bank_name": {
+                                        "type": "string",
+                                        "example": "UBA"
+                                    },
+                                    "bank_account": {
+                                        "type": "integer",
+                                        "example": "9161645867"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "pending"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Vendor created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Vendor registered successfully"
+                                        },
+                                        "vendor": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "ABC Supplies Ltd"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "abc@example.com"
+                                                },
+                                                "registration_number": {
+                                                    "type": "string",
+                                                    "example": "RC123456"
+                                                },
+                                                "tax_number": {
+                                                    "type": "string",
+                                                    "example": "TIN123456789"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The email has already been taken."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Something went wrong."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Vendor"
+                ],
+                "summary": "delete a vendor",
+                "operationId": "86d8b3806e881fa2484a3dba0d182bcc",
+                "responses": {
+                    "201": {
+                        "description": "vendor deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "vendor deleted successfully"
+                                        },
+                                        "vendor": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/vendor/{id}": {
+            "get": {
+                "tags": [
+                    "Vendor"
+                ],
+                "summary": "Get an authenticated vendor",
+                "operationId": "82e45e6e4dc45f1b5769bf39f39ad45e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "vendor id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "vendor retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "vendor retrieved successfully"
+                                        },
+                                        "member": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/get-documents": {
+            "get": {
+                "tags": [
+                    "document"
+                ],
+                "summary": "Get all vendor documents",
+                "description": "Display a listing of the resource.",
+                "operationId": "e1f25c83fc5fc7b01abb2e8fc33ff365",
+                "responses": {
+                    "200": {
+                        "description": "user retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "documents retrieved successfully"
+                                        },
+                                        "documents": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/vendors/documents": {
+            "get": {
+                "tags": [
+                    "document"
+                ],
+                "summary": "Get an authenticated vendor's documents",
+                "description": "Display the specified resource.",
+                "operationId": "2ffc6ecdfd3e6b55858c6222f1daaafa",
+                "responses": {
+                    "201": {
+                        "description": "documents retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "documents retrieved successfully"
+                                        },
+                                        "documents": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The name field is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "document"
+                ],
+                "summary": "Upload a vendor documents",
+                "description": "Store a newly created resource in storage.",
+                "operationId": "19700150ae1bb17c2107e496590ba74c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "document_type",
+                                    "file"
+                                ],
+                                "properties": {
+                                    "document_type": {
+                                        "type": "string",
+                                        "example": "tax_certificate",
+                                        "enum": [
+                                            "certificate_of_incorporation",
+                                            "tax_certificate",
+                                            "bank_verification",
+                                            "business_license",
+                                            "company_profile"
+                                        ]
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "documents uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "file uploaded successfully"
+                                        },
+                                        "author": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The file  is required."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/vendors/documents/{id}": {
+            "put": {
+                "tags": [
+                    "document"
+                ],
+                "summary": "Update a vendor document",
+                "description": "Update the specified resource in storage.",
+                "operationId": "0626021665d33c8294866dc68f2a4015",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "document_type": {
+                                        "type": "string",
+                                        "example": "tax_certificate"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Vendor document updated successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Vendor document not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "document"
+                ],
+                "summary": "Delete a vendor document",
+                "description": "Remove the specified resource from storage.",
+                "operationId": "acbe9a2a2aad5c222113486a5d6b853d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Vendor document deleted successfully"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Vendor document not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Auth"
+        },
+        {
+            "name": "category",
+            "description": "category"
+        },
+        {
+            "name": "Goods Receipts",
+            "description": "Goods Receipts"
+        },
+        {
+            "name": "Goods Receipt Items",
+            "description": "Goods Receipt Items"
+        },
+        {
+            "name": "Invoices",
+            "description": "Invoices"
+        },
+        {
+            "name": "Invoice Items",
+            "description": "Invoice Items"
+        },
+        {
+            "name": "Payments",
+            "description": "Payments"
+        },
+        {
+            "name": "Permissions",
+            "description": "Permissions"
+        },
+        {
+            "name": "Purchase Orders",
+            "description": "Purchase Orders"
+        },
+        {
+            "name": "Purchase Order Items",
+            "description": "Purchase Order Items"
+        },
+        {
+            "name": "Purchase Requests",
+            "description": "Purchase Requests"
+        },
+        {
+            "name": "Purchase Request Items",
+            "description": "Purchase Request Items"
+        },
+        {
+            "name": "Quotations",
+            "description": "Quotations"
+        },
+        {
+            "name": "Quotations items",
+            "description": "Quotations items"
+        },
+        {
+            "name": "RFQs",
+            "description": "RFQs"
+        },
+        {
+            "name": "RFQ Vendors",
+            "description": "RFQ Vendors"
+        },
+        {
+            "name": "service",
+            "description": "service"
+        },
+        {
+            "name": "Vendor",
+            "description": "Vendor"
+        },
+        {
+            "name": "document",
+            "description": "document"
+        }
+    ]
+}
