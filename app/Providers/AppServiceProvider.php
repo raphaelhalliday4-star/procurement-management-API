@@ -25,6 +25,7 @@ use App\Policies\CategoryPolicy;
 use App\Policies\InvoiceItemPolicy;
 use App\Policies\InvoicePolicy;
 use App\Policies\PaymentPolicy;
+use App\Policies\PermissionPolicy;
 use App\Policies\PurchaseOrderItemPolicy;
 use App\Policies\PurchaseOrderPolicy;
 use App\Policies\PurchaseRequestPolicy;
@@ -38,6 +39,7 @@ use App\Policies\VendorDocumentPolicy;
 use App\Policies\VendorPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
+use Spatie\Permission\Models\Permission;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -72,5 +74,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Invoice::class, InvoicePolicy::class);
         Gate::policy(InvoiceItem::class, InvoiceItemPolicy::class);
         Gate::policy(Payment::class, PaymentPolicy::class);
+        Gate::policy(Permission::class, PermissionPolicy::class);
     }
 }

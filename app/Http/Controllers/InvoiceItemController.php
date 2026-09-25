@@ -30,20 +30,44 @@ class InvoiceItemController extends Controller
                 ]
             )
         ),
-        responses: [
-            new OA\Response(response: 200, description: "Invoice item added successfully"),
-            new OA\Response(response: 400, description: "Invoice item cannot be added"),
-            new OA\Response(response: 401, description: "Unauthorized"),
-            new OA\Response(response: 403, description: "Invoice does not belong to the authenticated vendor"),
-            new OA\Response(response: 422, description: "Validation error"),
+         responses: [
+            new OA\Response(
+                response: 201,
+                description: "user created successfully",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "user created successfully"),
+                        new OA\Property(property: "member", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Validation error",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "The name field is required."),
+                        new OA\Property(property: "errors", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: "Unauthorized",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "error", type: "string", example: "Unauthorized"),
+                    ]
+                )
+            ),
         ]
     )]
     public function store(InvoiceItemRequest $request){
             Gate::authorize('create', InvoiceItem::class);
           $user = Auth::user();
-          $invoice = Invoice::find($request->invoice_id);
+          $invoice = Invoice::findOrFail($request->invoice_id);
 
-          if($invoice->vendor_id !== $user->vendor){
+          if((int) $invoice->vendor_id !== (int) $user->vendor_id){
             return response()->json([ 
                 'message' => 'This invoice does not belong to you.' 
             ], 403);
@@ -57,25 +81,27 @@ class InvoiceItemController extends Controller
 
           $purchaseOrderItem = PurchaseOrderItem::find($request->purchase_order_item_id);
 
-          if($purchaseOrderItem->purchaseOrder !== $invoice->purchaseOrder){
+          if((int) $purchaseOrderItem->purchase_order_id !== (int) $invoice->purchase_order_id){
             return response()->json([ 
                 'message' => 'This purchase order item does not belong to the invoice purchase order.' 
              ], 400);
           }
 
-            $reciecvedQuantity = GoodsReceiptItem::where('purchase_order_item_id', $purchaseOrderItem->id)->sum('quantity_recieved');
+            $receivedQuantity = GoodsReceiptItem::where('purchase_order_item_id', $purchaseOrderItem->id)
+                ->sum('quantity_received');
 
-            if($reciecvedQuantity === 0){
+            if($receivedQuantity <= 0){
                 return response()->json([
                      'message' => 'this puurchase order item has not been recieved',
                 ]);
             }
 
-            $alreadyInvoiced = Invoice::where('purchase_order_item',$purchaseOrderItem->id)->sum('quantity');
+            $alreadyInvoiced = InvoiceItem::where('purchase_order_item_id', $purchaseOrderItem->id)
+                ->sum('quantity');
 
-            $remainingQuantity = $reciecvedQuantity - $alreadyInvoiced;
+            $remainingQuantity = $receivedQuantity - $alreadyInvoiced;
 
-            if($alreadyInvoiced <= 0){
+            if($remainingQuantity <= 0){
                 return response()->json([ 
                     'message' => 'The received quantity for this item has already been fully invoiced.' 
                 ], 400);
@@ -93,7 +119,6 @@ class InvoiceItemController extends Controller
             $invoiceItem = InvoiceItem::create([
                 'invoice_id' => $invoice->id, 
                 'purchase_order_item_id' => $purchaseOrderItem->id, 
-                'product_id' => $purchaseOrderItem->product_id, 
                 'service_id' => $purchaseOrderItem->service_id, 
                 'quantity' => $request->quantity, 
                 'unit_price' => $purchaseOrderItem->unit_price, 

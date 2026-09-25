@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PaymentRequest extends FormRequest
+class InvokeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,9 @@ class PaymentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'invoice_id'=> ['required','integer','exists:invoices,id'],
-            'payment_method'=>['required','string','in:bank_transfer,cash,cheque'],
-            'note'=>['string','nullable']
+            'user_id'=>['required','integer', 'exists:users,id'],
+            'role'=>['array'],
+            'role.*'=>['required','integer', 'exists:roles,id']
         ];
     }
 }

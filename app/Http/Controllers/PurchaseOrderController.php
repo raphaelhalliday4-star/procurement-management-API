@@ -43,7 +43,7 @@ class PurchaseOrderController extends Controller
         $user = Auth::user();
         Gate::authorize('create', PurchaseOrder::class );
         $quotation = Quotation::findOrFail($request->quotation_id);
-        if($quotation->status !== 'approved'){
+        if($quotation->status !== 'accepted'){
             return response()->json([
                 'message' => 'Quotation is not approved.'
             ], 400);

@@ -30,11 +30,36 @@ class GoodsReceiptItemController extends Controller
                 ]
             )
         ),
-        responses: [
-            new OA\Response(response: 201, description: "Goods receipt item created successfully"),
-            new OA\Response(response: 400, description: "Goods receipt or purchase order item is invalid"),
-            new OA\Response(response: 401, description: "Unauthorized"),
-            new OA\Response(response: 422, description: "Validation error"),
+         responses: [
+            new OA\Response(
+                response: 201,
+                description: "user created successfully",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "user created successfully"),
+                        new OA\Property(property: "member", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Validation error",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "The name field is required."),
+                        new OA\Property(property: "errors", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: "Unauthorized",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "error", type: "string", example: "Unauthorized"),
+                    ]
+                )
+            ),
         ]
     )]
     public function store(GoodsRecieptItemRequest $request){
@@ -51,9 +76,9 @@ class GoodsReceiptItemController extends Controller
 
         $purchaseOrder = $goodsReciept->purchaseOrder;
 
-        if($purchaseOrder->status !== 'sent') {
+        if(!in_array($purchaseOrder->status, ['sent', 'partially_received'], true)) {
             return response()->json([
-                'message' => 'Items can only be added to goods receipts for purchase orders that have been sent.'
+                'message' => 'Items can only be added to goods receipts for sent or partially received purchase orders.'
             ], 400);
         }
 
@@ -64,8 +89,9 @@ class GoodsReceiptItemController extends Controller
                 'message' => 'The purchase order item does not belong to the same purchase order as the goods receipt.'
             ], 400);
         }
-
-        $alreadyReceived = GoodsReceipt::where('purchase_order_id', $purchaseOrderItem->id)->sum('quantity_received');
+try{
+        $alreadyReceived = GoodsReceiptItem::where('purchase_order_item_id', $purchaseOrderItem->id)
+            ->sum('quantity_received');
         $remainingQuantity = $purchaseOrderItem->quantity - $alreadyReceived;
 
         if($request->quantity_received > $remainingQuantity) {
@@ -81,6 +107,13 @@ class GoodsReceiptItemController extends Controller
             'quantity_received' => $request->quantity_received,
             'notes' => $request->notes,
         ]);
+             } catch (\Throwable $exception) {
+                report($exception);
+
+                return response()->json([
+                    'message' => 'Goods receipt item could not be created.'
+                ], 500);
+             }
 
         return response()->json([
             'message' => 'Goods receipt item created successfully.',

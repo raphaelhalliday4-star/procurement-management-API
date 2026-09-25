@@ -171,11 +171,18 @@ Route::prefix('v1')->middleware('auth:api')->group(function () {
 
 // permission routes
 Route::prefix('v1')->middleware('auth:api')->group(function () {
+  Route::get('get-roles', [PermissionController::class, 'getRoles']);
+  Route::get('get-permissions', [PermissionController::class, 'getPermissions']);
   Route::post('permissions/roles', [PermissionController::class, 'assignRole']);
   Route::post('permissions', [PermissionController::class, 'assignPermission']);
+  Route::post('auth/remove-role', [PermissionController::class, 'invokeRole']);
+  Route::post('auth/remove-permission', [PermissionController::class, 'invokePermission']);
+  Route::get('user-role/{id}', [PermissionController::class, 'getUserRole']);
+  Route::delete('permissions/{id}', [PermissionController::class, 'destroy']);
 });
 
 // payment routes
 Route::prefix('v1')->middleware('auth:api')->group(function () {
+  Route::get('payments', [PaymentController::class, 'index']);
   Route::post('payments', [PaymentController::class, 'store']);
 });

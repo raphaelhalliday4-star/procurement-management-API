@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PurchaseOrderItemRequest;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderItem;
-use App\Models\PurchaseRequestItem;
 use App\Models\QuotationItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,13 +29,39 @@ class PurchaseOrderItemController extends Controller
                 ]
             )
         ),
-        responses: [
-            new OA\Response(response: 201, description: "Purchase order item created successfully"),
-            new OA\Response(response: 400, description: "Purchase order or quotation item is invalid"),
-            new OA\Response(response: 401, description: "Unauthorized"),
-            new OA\Response(response: 422, description: "Validation error"),
+           responses: [
+            new OA\Response(
+                response: 201,
+                description: "user created successfully",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "user created successfully"),
+                        new OA\Property(property: "member", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Validation error",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "The name field is required."),
+                        new OA\Property(property: "errors", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: "Unauthorized",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "error", type: "string", example: "Unauthorized"),
+                    ]
+                )
+            ),
         ]
     )]
+
     public function store(PurchaseOrderItemRequest $request){
             Gate::authorize('create', PurchaseOrderItem::class);
           $user = Auth::user();
@@ -63,7 +88,7 @@ class PurchaseOrderItemController extends Controller
 
           $totalPrice = $quotationItem->unit_price * $request->quantity;
 
-          $purchaseOrderItem = PurchaseRequestItem::create([
+          $purchaseOrderItem = PurchaseOrderItem::create([
               'purchase_order_id' => $purchaseOrder->id,
               'quotation_item_id' => $quotationItem->id,
               'service_id' => $quotationItem->service_id,

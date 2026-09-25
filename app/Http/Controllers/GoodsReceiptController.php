@@ -28,26 +28,51 @@ class GoodsReceiptController extends Controller
                         ]
                   )
             ),
-            responses: [
-                  new OA\Response(response: 201, description: "Goods receipt created successfully"),
-                  new OA\Response(response: 400, description: "Purchase order is not ready for receiving"),
-                  new OA\Response(response: 401, description: "Unauthorized"),
-                  new OA\Response(response: 422, description: "Validation error"),
-            ]
-      )]
+         responses: [
+            new OA\Response(
+                response: 201,
+                description: "user created successfully",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "user created successfully"),
+                        new OA\Property(property: "member", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Validation error",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "The name field is required."),
+                        new OA\Property(property: "errors", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: "Unauthorized",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "error", type: "string", example: "Unauthorized"),
+                    ]
+                )
+            ),
+        ]
+    )]
     public function store(GoodsRecieptRequest $request)
     {
              Gate::authorize('create', GoodsReceipt::class);
        $user = Auth::user();
        $purchaseOrder = PurchaseOrder::findOrFail($request->purchase_order_id);
-       if($purchaseOrder->status !== 'sent') {
+             if(!in_array($purchaseOrder->status, ['sent', 'partially_received'], true)) {
          return response()->json([
-            'message' => 'Goods receipt can only be created for purchase orders that have been sent.'
+                        'message' => 'Goods receipt can only be created for sent or partially received purchase orders.'
          ], 400);
        }
 
        $receiptNumber = 'GR-' . date('Y') . '-' . str_pad( GoodsReceipt::count() + 1, 5, '0', STR_PAD_LEFT );
-
+    try {
          $goodsReceipt = GoodsReceipt::create([
                 'purchase_order_id' => $purchaseOrder->id,
                 'received_date' => $request->received_date,
@@ -56,6 +81,13 @@ class GoodsReceiptController extends Controller
                 'received_by' => $user->id,
                 'status' => 'pending',
           ]);
+             } catch (\Throwable $exception) {
+                report($exception);
+
+                return response()->json([
+                    'message' => 'Goods receipt could not be created.'
+                ], 500);
+             }
     
           return response()->json([
                 'message' => 'Goods receipt created successfully.',

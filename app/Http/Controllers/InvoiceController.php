@@ -44,15 +44,15 @@ class InvoiceController extends Controller
     public function store(InvoiceRequest $request){
         Gate::authorize('create', Invoice::class);
         $user = Auth::user();
-        $purchaseOrder = PurchaseOrder::find($request->purchase_order_id);
+          $purchaseOrder = PurchaseOrder::findOrFail($request->purchase_order_id);
 
-        if($purchaseOrder->vendor !==  $user->vendor){
+          if((int) $purchaseOrder->vendor_id !== (int) $user->vendor_id){
               return response()->json([
                 'message'=> 'This purchase order does not belong to you.'
-              ]);
+              ], 403);
         }
 
-        if(!in_array($purchaseOrder, ['sent', 'partially_recieved', 'recieved'])){
+          if(!in_array($purchaseOrder->status, ['sent', 'partially_received', 'received'], true)){
             return response()->json([ 
               'message' => 'An invoice can only be created for a sent, partially received, or received purchase order.' 
             ], 400);
@@ -148,11 +148,36 @@ class InvoiceController extends Controller
         tags: ["Invoices"],
         security: [["bearerAuth" => []]],
         parameters: [new OA\Parameter(name: "invoice", in: "path", required: true, schema: new OA\Schema(type: "integer"))],
-        responses: [
-            new OA\Response(response: 200, description: "Invoice approved successfully"),
-            new OA\Response(response: 400, description: "Invoice cannot be approved"),
-            new OA\Response(response: 401, description: "Unauthorized"),
-            new OA\Response(response: 404, description: "Invoice not found"),
+         responses: [
+            new OA\Response(
+                response: 201,
+                description: "user created successfully",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "user created successfully"),
+                        new OA\Property(property: "member", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Validation error",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "The name field is required."),
+                        new OA\Property(property: "errors", type: "object"),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 401,
+                description: "Unauthorized",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "error", type: "string", example: "Unauthorized"),
+                    ]
+                )
+            ),
         ]
     )]
     public function approve(Invoice $invoice){
@@ -177,15 +202,17 @@ class InvoiceController extends Controller
         ]);
     }
 
-    foreach($invoice->items as $items){
-        $recievedQuantity = GoodsReceiptItem::where('purchase_order_item_id', $items->purchase_order_item_id)->sum('quantity_recieved');
-    }
+    foreach($invoice->items as $item){
+        $receivedQuantity = GoodsReceiptItem::where('purchase_order_item_id', $item->purchase_order_item_id)
+            ->sum('quantity_received');
 
-    if($items > $recievedQuantity){
-        return response()->json([
-            'message'=> 'Invoice quantity cannot exceed the received quantity.',
-            'purchase_order_item_id' => $items->purchase_order_item_id
-        ]);
+        if($item->quantity > $receivedQuantity){
+            return response()->json([
+                'message'=> 'Invoice quantity cannot exceed the received quantity.',
+                'purchase_order_item_id' => $item->purchase_order_item_id,
+                'received_quantity' => $receivedQuantity,
+            ], 400);
+        }
     }
 
     $invoice->update([

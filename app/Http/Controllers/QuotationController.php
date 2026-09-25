@@ -148,11 +148,11 @@ class QuotationController extends Controller
             ], 400);
         }
 
-        if (now()->lt($rfq->opening_date)) {
-            return response()->json([
-                'message' => 'The quotation submission window has not opened yet.'
-            ], 400);
-        }
+        // if (now()->lt($rfq->opening_date)) {
+        //     return response()->json([
+        //         'message' => 'The quotation submission window has not opened yet.'
+        //     ], 400);
+        // }
 
         if (now()->gt($rfq->closing_date)) {
             return response()->json([
@@ -234,12 +234,6 @@ class QuotationController extends Controller
     )]
     public function evaluate(Quotation $quotation){
     Gate::authorize('evaluate', $quotation);
-    //     if (!Auth::user()->can('quotations.evaluate')) {
-    //     return response()->json([
-    //         'message' => 'You do not have permission to evaluate quotations.'
-    //     ], 403);
-    // }
-
     $user = Auth::user();
 
     if($quotation->status !== 'submitted'){
@@ -248,11 +242,11 @@ class QuotationController extends Controller
         ], 400);
     }
 
-    if($quotation->rfq->status !== 'closed'){
-        return response()->json([
-            'message' => 'Quotations can only be evaluated for closed RFQs.'
-        ], 400);
-    }
+    // if($quotation->rfq->status !== 'closed'){
+    //     return response()->json([
+    //         'message' => 'Quotations can only be evaluated for closed RFQs.'
+    //     ], 400);
+    // }
 
     $quotation->update(['status' => 'under_review']);
 
@@ -293,11 +287,11 @@ class QuotationController extends Controller
             ], 400);
         }
 
-        if($quotation->rfq->status !== 'closed'){
-            return response()->json([
-                'message' => 'Quotations can only be accepted for closed RFQs.'
-            ], 400);
-        }
+        // if($quotation->rfq->status !== 'closed'){
+        //     return response()->json([
+        //         'message' => 'Quotations can only be accepted for closed RFQs.'
+        //     ], 400);
+        // }
 
         $quotation->update(['status' => 'accepted']);
 
